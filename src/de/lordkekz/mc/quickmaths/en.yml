@@ -1,0 +1,16 @@
+tabComplete:
+   question: "\"Question\""
+   answer: "\"Answer\""
+command:
+   alreadyEnabled: "Quickmaths already enabled."
+   enabled: "Quickmaths enabled."
+   alreadyDisabled: "Quickmaths already disabled."
+   disabled: "Quickmaths disabled."
+   hasOpenQuestion: "There is an open question already. Repeat the command to override."
+messages:
+   # Available variables for questionAskMessage: %question%, %reward%, %answerTime%
+   questionAskMessage: "\u00A77[\u00A7eQM\u00A77] \u00A7b\u00A7lQuickMaths: %question%"
+   # Available variables for questionAnsweredMessage: %player%, %answer%=%solution%, %answerTime%, %reward%
+   questionAnsweredMessage: "\u00A77[\u00A7eQM\u00A77] \u00A76\u00A7l%player%\u00A76\u00A7l won %reward% level! The solution was %answer%."
+   # Available variables for questionTimeUpMessage: %question%, %solution%=%answer%, %reward%
+   questionTimeUpMessage: "\u00A77[\u00A7eQM\u00A77] \u00A7c\u00A7lTime's up! The solution was %answer%."

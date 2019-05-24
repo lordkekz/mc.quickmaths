@@ -1,0 +1,14 @@
+name: Quickmaths
+main: de.lordkekz.mc.quickmaths.QuickmathsPlugin
+version: 1.0
+api-version: 1.14
+commands:
+   quickmaths:
+      description: Manages Quickmaths
+      permission: quickmaths.admin
+      usage: 'Usage: /<command> <enable | disable | ask>  [<question...> <answer...>]'
+      aliases: qm
+permissions:
+   quickmaths.admin:
+      description: Allows you to use enable and disable quickmaths.
+      default: op

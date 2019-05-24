@@ -1,0 +1,16 @@
+tabComplete:
+   question: "\"Frage\""
+   answer: "\"Antwort\""
+command:
+   alreadyEnabled: "Quickmaths ist bereits aktiviert."
+   enabled: "Quickmaths aktiviert."
+   alreadyDisabled: "Quickmaths ist bereits deaktiviert."
+   disabled: "Quickmaths deaktiviert."
+   hasOpenQuestion: "Es gibt bereits eine offene Frage. Führe den Befehl erneut aus, um sie zu überschreiben."
+messages:
+   # Verfügbare variablen für questionAskMessage: %question%, %reward%, %answerTime%
+   questionAskMessage: "\u00A77[\u00A7eQM\u00A77] \u00A7b\u00A7lQuickMaths: %question%"
+   # Verfügbare variablen für questionAnsweredMessage: %player%, %answer%=%solution%, %answerTime%, %reward%
+   questionAnsweredMessage: "\u00A77[\u00A7eQM\u00A77] \u00A76\u00A7l%player%\u00A76\u00A7l hat %reward% Level gewonnen! Die Lösung lautet %answer%."
+   # Verfügbare variablen für questionTimeUpMessage: %question%, %solution%=%answer%, %reward%
+   questionTimeUpMessage: "\u00A77[\u00A7eQM\u00A77] \u00A7c\u00A7lZeit abgelaufen! Die Lösung war %answer%."
