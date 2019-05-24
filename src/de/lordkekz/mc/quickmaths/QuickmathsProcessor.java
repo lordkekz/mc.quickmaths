@@ -17,6 +17,9 @@ public class QuickmathsProcessor {
 		this.pl = pl;
 	}
 	
+	/**
+	 * Generates an question-answer pair.
+	 */
 	private void makeQuestion() {
 		Random r = new Random();
 		int numCount = r.nextInt(FileManager.getConfig().getInt("maxNumberCount")-FileManager.getConfig().getInt("minNumberCount"))+FileManager.getConfig().getInt("minNumberCount");
@@ -50,16 +53,26 @@ public class QuickmathsProcessor {
 		solution = Integer.toString(sol);
 	}
 
+	/**
+	 * @return whether there is an question that can be answered
+	 */
 	public boolean hasOpenQuestion() {
 		return question!=null;
 	}
 	
+	/**
+	 * @return whether the QuickmathsProcessor will ask questions regularly
+	 */
 	public boolean isEnabled() {
 		return enabled;
 	}
 
+	/**
+	 * Processes an event. If the message is the correct answer to the active question the player will be rewarded.
+	 * @param event the event to be processed
+	 */
 	public void processChatEvent(AsyncPlayerChatEvent event) {
-		if(event.getMessage().trim().equalsIgnoreCase(solution)) {
+		if(hasOpenQuestion() && event.getMessage().trim().equalsIgnoreCase(solution)) {
 			question = null;
 			event.getPlayer().giveExpLevels(FileManager.getConfig().getInt("reward"));
 
@@ -74,12 +87,19 @@ public class QuickmathsProcessor {
 		}
 	}
 
+	/**
+	 * Disables the QuickmathsProcessor.
+	 */
 	public void cancel() {
 		enabled=false;
 		question=solution=null;
 		Bukkit.getScheduler().cancelTasks(pl);
 	}
 
+	/**
+	 * Enables  the QuickmathsProcessor and schedules regular broadcasts.
+	 * @param delay the delay of the first broadcast (in ticks)
+	 */
 	public void schedule(long delay) {
 		if (enabled) return;
 		enabled=true;
@@ -89,6 +109,13 @@ public class QuickmathsProcessor {
 		}, delay, FileManager.getConfig().getInt("waitingTime"));
 	}
 	
+	/**
+	 * Cancels the regular questions and asks given question.
+	 * After the question is answered or the time is up it re-schedules the regular cycle (if it was scheduled before).
+	 * @param question the qustion
+	 * @param answer the answer
+	 * @param delay the delay before asking
+	 */
 	public void ask(String question, String answer, int delay) {
 		boolean wasEnabled = enabled;
 		cancel();
@@ -97,6 +124,10 @@ public class QuickmathsProcessor {
 		ask(wasEnabled);
 	}
 	
+	/**
+	 * Cancels the regular questions and immediately asks a question.
+	 * After the question is answered or the time is up it re-schedules the regular cycle (if it was scheduled before).
+	 */
 	public void askAuto() {
 		boolean wasEnabled = enabled;
 		cancel();
@@ -104,6 +135,10 @@ public class QuickmathsProcessor {
 		ask(wasEnabled);
 	}
 
+	/**
+	 * Broadcasts the question. If the time is up before someone correctly answers the question it will also broadcast that.
+	 * @param reschedule whether or not to re-schedule the regular cycle; relevant for manually initiated questions.
+	 */
 	private void ask(boolean reschedule) {
 		askTime = System.currentTimeMillis();
 		Bukkit.broadcastMessage(

@@ -38,14 +38,13 @@ public class QuickmathsPlugin extends JavaPlugin implements Listener {
 
 	@Override
 	public void onDisable() {
-		
+		// nothing to do
 	}
 	
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
-        if (processor!=null && processor.hasOpenQuestion()) {
+        if (processor!=null && processor.hasOpenQuestion()) // process chatevent if it could be a response to a question
             processor.processChatEvent(event);
-        }
     }
     
     @Override
@@ -69,7 +68,7 @@ public class QuickmathsPlugin extends JavaPlugin implements Listener {
 	    		if (processor.isEnabled()) {
 	        		sender.sendMessage(ChatColor.YELLOW+FileManager.getTexts().getString("command.alreadyEnabled"));
 	    		} else {
-	    			processor.schedule(0);
+	    			processor.schedule(0); // schedules broadcast cycle
 	    			FileManager.getConfig().set("enable", true);
 	    			FileManager.saveConfig();
 	        		sender.sendMessage(ChatColor.GREEN+FileManager.getTexts().getString("command.enabled"));
@@ -79,31 +78,29 @@ public class QuickmathsPlugin extends JavaPlugin implements Listener {
 	    		if (!processor.isEnabled()) {
 	        		sender.sendMessage(ChatColor.YELLOW+FileManager.getTexts().getString("command.alreadyDisabled"));
 	    		} else {
-	    			processor.cancel();
+	    			processor.cancel(); // cancels broadcast cycle
 	    			FileManager.getConfig().set("enable", false);
 	    			FileManager.saveConfig();
 	        		sender.sendMessage(ChatColor.GREEN+FileManager.getTexts().getString("command.disabled"));
 	    		}
 	    		return true;
 	    	} else if ((args[0].equalsIgnoreCase("ask"))) {
-	    		if (processor.hasOpenQuestion() && !overrideOpenQuestion) {
+	    		if (processor.hasOpenQuestion() && !overrideOpenQuestion) { // there is an open question; sender needs to execute the command again to confirm override
 	        		sender.sendMessage(ChatColor.RED+FileManager.getTexts().getString("command.hasOpenQuestion"));
 	        		overrideOpenQuestion=true;
-	    		} else if (args.length==1) {
+	    		} else if (args.length==1) { // no custom question/answer given; asking automatic question
 	        		overrideOpenQuestion=false;
 	    			processor.askAuto();
-	    		} else if (args.length>=3) {
+	    		} else if (args.length>=3) { // custom question and answer given; parsing (possibly multi-word) arguments
 	        		overrideOpenQuestion=false;
-	        		System.out.println(Arrays.toString(args));
-	        		System.out.println("tsts");
 	        		int i=1;
+	        		// collect arguments for question
 	        		if (args[i].charAt(0)!='"') return false;
 	        		StringBuilder qu = new StringBuilder(args[i]).deleteCharAt(0);
 	        		if (args[i].charAt(args[i].length()-1)=='"') {
 	        			qu.deleteCharAt(qu.length()-1);
 	        			i++;
 	        		} else for (i++; i<args.length; i++) {
-	        			System.out.println(i);
 	        			qu.append(' ').append(args[i]);
 	        			if (args[i].charAt(args[i].length()-1)=='"') {
 	        				qu.deleteCharAt(qu.length()-1);
@@ -111,15 +108,14 @@ public class QuickmathsPlugin extends JavaPlugin implements Listener {
 	        				break;
 	        			}
 	        		}
-	        		System.out.println(qu);
 
+	        		// collect arguments for answer
 	        		if (args[i].charAt(0)!='"') return false;
 	        		StringBuilder ans = new StringBuilder(args[i]).deleteCharAt(0);
 	        		if (args[i].charAt(args[i].length()-1)=='"') {
 	        			ans.deleteCharAt(ans.length()-1);
 	        			i++;
 	        		} else for (i++; i<args.length; i++) {
-	        			System.out.println(i);
 	        			ans.append(' ').append(args[i]);
 	        			if (args[i].charAt(args[i].length()-1)=='"') {
 	        				ans.deleteCharAt(ans.length()-1);
@@ -127,8 +123,9 @@ public class QuickmathsPlugin extends JavaPlugin implements Listener {
 	        				break;
 	        			}
 	        		}
-	        		System.out.println(ans);
-	    			processor.ask(qu.toString().trim(), ans.toString().trim(), 0);
+	        		
+	        		// make processor ask the question
+	    			processor.ask(qu.toString().trim(), ans.toString().trim(), 0); 
 	    		} else {
 	    			return false;
 	    		}

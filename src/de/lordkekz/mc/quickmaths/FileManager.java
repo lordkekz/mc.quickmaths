@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -17,8 +16,9 @@ public class FileManager {
 	private static File textsFile;
 	private static String initializedLang;
 	
+	
 	public static void setup(QuickmathsPlugin pl) {
-		// load config
+		// load config & save (in case defaults need to be copied)
 		configFile = new File("plugins/Quickmaths", "config.yml");
 		configFile.getParentFile().mkdirs();
 		config = YamlConfiguration.loadConfiguration(configFile);
@@ -31,6 +31,8 @@ public class FileManager {
 		config.addDefault("minNumberSize", 0);
 		config.addDefault("maxNumberCount", 4);
 		config.addDefault("minNumberCount", 2);
+		config.options().copyDefaults(true);
+		saveConfig();
 		
 		// load texts
 		textsFile = new File("plugins/Quickmaths", config.getString("language")+".yml");
@@ -45,10 +47,6 @@ public class FileManager {
 		}
 		texts = YamlConfiguration.loadConfiguration(textsFile);
 		initializedLang = config.getString("language");
-		
-		// save config
-		config.options().copyDefaults(true);
-		saveConfig();
 	}
 	
     public static void saveConfig() {
@@ -68,9 +66,8 @@ public class FileManager {
     }
     
     public static void reloadTexts() {
-    	if (!initializedLang.equalsIgnoreCase(config.getString("language"))) {
+    	if (!initializedLang.equalsIgnoreCase(config.getString("language"))) // change texts file if language changed in config
     		textsFile = new File("plugins/Quickmaths", config.getString("language")+".yml");
-    	}
 		texts = YamlConfiguration.loadConfiguration(textsFile);
     }
     
